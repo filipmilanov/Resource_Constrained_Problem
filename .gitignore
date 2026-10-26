@@ -1,0 +1,19 @@
+# macOS
+.DS_Store
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+*.egg-info/
+.ipynb_checkpoints/
+
+# Results (generated artifacts; keep folder via .gitkeep)
+results/*
+!results/.gitkeep
+
+# Editor
+.vscode/
+
+# Problem description (local only)
+problem/

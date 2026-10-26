@@ -1,0 +1,14 @@
+[project]
+name = "rckst"
+version = "0.1.0"
+description = "Resource-Constrained k-node Spanning Tree heuristics (Assignment 1)"
+authors = [{ name = "Filip Milanov" }, { name = "Maximilian Fischer" }]
+requires-python = ">=3.10"
+dependencies = ["mhlib", "numpy", "networkx", "pandas", "matplotlib"]
+
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]
