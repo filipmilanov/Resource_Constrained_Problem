@@ -6,11 +6,16 @@ __pycache__/
 *.py[cod]
 .venv/
 *.egg-info/
+.coverage
+.pytest_cache/
+.ruff_cache/
+build/
+dist/
 .ipynb_checkpoints/
 
 # Results (generated artifacts; keep folder via .gitkeep)
-results/*
-!results/.gitkeep
+docs/results/*
+!docs/results/.gitkeep
 
 # Editor
 .vscode/

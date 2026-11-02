@@ -2,13 +2,56 @@
 name = "rckst"
 version = "0.1.0"
 description = "Resource-Constrained k-node Spanning Tree heuristics (Assignment 1)"
+readme = "README.md"
 authors = [{ name = "Filip Milanov" }, { name = "Maximilian Fischer" }]
-requires-python = ">=3.10"
-dependencies = ["mhlib", "numpy", "networkx", "pandas", "matplotlib"]
+requires-python = ">=3.12"
+dependencies = [
+    "jaxtyping>=0.3",
+    "matplotlib>=3.9",
+    "networkx>=3.3",
+    "numpy>=2.0",
+    "pandas>=2.2",
+    "torch>=2.6",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=8.3",
+    "pytest-cov>=5.0",
+    "ruff>=0.8",
+]
 
 [build-system]
-requires = ["setuptools>=61"]
-build-backend = "setuptools.build_meta"
+requires = ["uv_build>=0.9.1,<0.10.0"]
+build-backend = "uv_build"
 
-[tool.setuptools.packages.find]
-where = ["src"]
+[tool.uv.sources]
+torch = { index = "pytorch-cpu" }
+
+[[tool.uv.index]]
+name = "pytorch-cpu"
+url = "https://download.pytorch.org/whl/cpu"
+explicit = true
+
+[tool.pytest.ini_options]
+addopts = ["--strict-config", "--strict-markers"]
+testpaths = ["tests"]
+
+[tool.coverage.run]
+branch = true
+source = ["rckst"]
+
+[tool.coverage.report]
+show_missing = true
+skip_covered = true
+
+[tool.ruff]
+line-length = 88
+src = ["src", "tests"]
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["B", "E", "F", "I", "UP"]
+
+[tool.ruff.lint.isort]
+known-first-party = ["rckst"]

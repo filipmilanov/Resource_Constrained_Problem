@@ -1,4 +1,7 @@
-"""RC-k-ST: Resource-Constrained k-node Spanning Tree heuristics.
+"""Heuristics for the resource-constrained k-node spanning tree problem."""
 
-Task - — owner: both.
-"""
+from importlib.metadata import version
+
+__version__ = version("rckst")
+
+__all__ = ["__version__"]
