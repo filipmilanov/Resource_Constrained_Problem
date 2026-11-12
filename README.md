@@ -1,29 +1,30 @@
 # RC-k-ST
 
-Resource-Constrained k-node Spanning Tree — Assignment 1 (see `milestone.md`).
+Resource-Constrained k-node Spanning Tree heuristics — Assignment 1.
 
 Authors: Filip Milanov, Maximilian Fischer
 
-## Setup
+
+# Thoughts:
+
+for exercise 1. and 2 was my original interpretation that the constructed heuristic needs to always produce a solution that
+is at least feasible but not nessesarily minimal. In my tests i found out that this it self is not trival. Therefore i changed
+my interpretation that we need to construct a k-subtree that is not nessesarily feasable but tries to be.
+
+
+
+
+## Requirements
+
+Python 3.12, [uv](https://docs.astral.sh/uv/)
+
 
 ```bash
-python3 -m venv .venv
-source .venv/bin/activate
-pip install -r requirements.txt   # mhlib, numpy, networkx, pandas, matplotlib
-pip install -e .                  # makes `import rckst` work
+uv sync
 ```
 
-## Layout
-
-| Path | Purpose |
-|---|---|
-| `src/rckst/` | Python package (instance reader, heuristics, local search, metaheuristics) |
-| `scripts/` | Command-line entry points (experiments, solution generation) |
-| `tests/` | Tests / validator checks |
-| `instances/` | Problem instances (`train/`, `test/`, `competition/`, `example_instance.txt`) |
-| `results/` | Generated experiment output (CSVs, plots) — not committed except via `.gitkeep` |
-| `report/` | Report source (LaTeX/Word) and figures |
-| `milestone.md` | Assignment milestones/timeline |
+PyTorch is installed from its official CPU-only package index; CUDA and a GPU
+are not required.
 
 ## Task split
 
@@ -37,9 +38,5 @@ Task 9 (delta-evaluation) plugs into the neighborhoods from task 4/5, so the int
 ## Running
 
 ```bash
-python -c "import rckst"
+uv run python -c "import rckst; print(rckst.__version__)"
 ```
-
-## Milestones
-
-Tracked in `milestone.md` (M0–M10).
