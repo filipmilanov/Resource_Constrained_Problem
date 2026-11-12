@@ -62,19 +62,18 @@ class RandomizedConstructionTask(RCKSTTask):
         # TODO batch the root retries
         for j in range(0, rootRetries):
             root = rootTryOrder[j] + 1
-            currentNodes = torch.zeros([inst.k], dtype=torch.int64)
+            inTree = torch.zeros(inst.n + 1, dtype=torch.bool, device=inst.edge_index.device)
             currentEdges = torch.zeros([2, inst.k - 1], dtype=torch.int64)
             currentTotalWeight = torch.zeros([1], dtype=torch.int64)
-            currentNodes[0] = root
+            inTree[root] = True
             currentCosts: Float[Tensor, "m"] = inst.node_resources[root - 1]
 
             for i in range(0, config.instance.k - 1):
                 # first step is to calculate which edges can be used to add nodes which are new and are connected to the current tree
                 # P is the number of Possible Edges to add
-                inSrc: Int[Tensor, "E"] = torch.isin(inst.edge_index[0, :], currentNodes[0 : i + 1])
-                inDest: Int[Tensor, "E"] = torch.isin(inst.edge_index[1, :], currentNodes[0 : i + 1])
-                addsNewNode = inSrc != inDest
-                mask = (inSrc | inDest) & addsNewNode
+                inSrc = inTree[inst.edge_index[0, :]]
+                inDest = inTree[inst.edge_index[1, :]]
+                mask = inSrc ^ inDest
                 addableEdgesIndices: Int[Tensor, "P"] = torch.nonzero(mask).squeeze(1)
 
                 if addableEdgesIndices.shape[0] == 0:
@@ -103,7 +102,7 @@ class RandomizedConstructionTask(RCKSTTask):
 
                 # update the tree and solution
                 currentCosts = resourceBalances[selectedEdge, :]
-                currentNodes[i + 1] = newNodes[selectedEdge]
+                inTree[newNodes[selectedEdge]] = True
                 currentEdges[:, i] = addableEdges[:, selectedEdge]
                 currentTotalWeight = edgeWeights[selectedEdge] + currentTotalWeight
 

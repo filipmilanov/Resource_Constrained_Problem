@@ -3,7 +3,7 @@ import time
 from collections.abc import Sequence
 from pathlib import Path
 
-from rckst.core.models import RCKSTError, RCKSTInstance, RCKSTSolution, RCKSTTask, RCKSTTaskConfig, RCKSTTaskOptions
+from rckst.core.models import RCKSTError, RCKSTInstance, RCKSTNeighborhood, RCKSTSolution, RCKSTTask, RCKSTTaskConfig, RCKSTTaskOptions
 from rckst.core.rckst_file_manager import RCKSTFileManager
 
 
@@ -12,7 +12,10 @@ class RCKSTTaskManager:
         self.tasks: dict[str, RCKSTTask] = {task.name: task for task in tasks}
         self.logger: logging.Logger = logger or logging.getLogger(__name__)
 
-    def run_task(self, task_name: str, instance_path: Path, output_path: Path | None = None, options: RCKSTTaskOptions | None = None) -> tuple[RCKSTSolution, float]:
+    def run_task(
+        self, task_name: str, instance_path: Path, output_path: Path | None = None, options: RCKSTTaskOptions | None = None,
+        neighborhood: list[RCKSTNeighborhood] | RCKSTNeighborhood | None = None,
+    ) -> tuple[RCKSTSolution, float]:
         if task_name not in self.tasks:
             self.logger.error("Task '%s' not found in registered tasks: %s", task_name, list(self.tasks.keys()))
             raise RCKSTError(f"Task '{task_name}' is not registered.")
@@ -25,7 +28,7 @@ class RCKSTTaskManager:
         self.logger.info("Loaded instance '%s' (n=%d, E=%d, k=%d, m=%d) in %.4fs", instance.name, instance.n, instance.E, instance.k, instance.m, time.perf_counter() - load_start)
 
         task_options = options or RCKSTTaskOptions()
-        config = RCKSTTaskConfig(instance=instance, options=task_options)
+        config = RCKSTTaskConfig(instance=instance, options=task_options, neighborhood=neighborhood)
 
         self.logger.info("Starting task '%s' on instance '%s' (seed=%s, params=%s)", task_name, instance.name, task_options.seed, task_options.params)
         solve_start = time.perf_counter()
